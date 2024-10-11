@@ -50,7 +50,6 @@ class Game(private val cardImages: List<Int>) {
                 streak = 0
             }
         }
-
         return false
     }
 }

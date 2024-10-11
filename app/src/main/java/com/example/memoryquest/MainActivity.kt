@@ -50,6 +50,10 @@ class MainActivity : AppCompatActivity() {
         startTimer()
     }
 
+    private fun updateScore(score: Int) {
+        tvScore.text = "Pontuação: $score"
+    }
+
     private fun startTimer() {
         countDownTimer = object : CountDownTimer(60000, 1000) {  // 60 segundos, intervalo de 1 segundo
             override fun onTick(millisUntilFinished: Long) {
@@ -65,6 +69,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLoseScreen() {
         val intent = Intent(this, LoseActivity::class.java)
+        intent.putExtra("score", game.score)  // Passa a pontuação para a LoseActivity
         startActivity(intent)
         finish()  // Fecha a MainActivity
     }

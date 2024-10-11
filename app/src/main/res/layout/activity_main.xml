@@ -3,36 +3,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:gravity="center">
 
-    <!-- Texto para exibir a pontuação, alinhado no topo -->
+    <!-- Texto da Pontuação -->
     <TextView
         android:id="@+id/tvScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pontuação: 0"
-        android:textSize="24sp"
+        android:textSize="26sp"
         android:textColor="@android:color/black"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:textStyle="bold"/>
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"/>
 
+    <!-- Texto do Timer -->
     <TextView
         android:id="@+id/tvTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tempo: 60"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="20dp" />
+        android:textSize="22sp"
+        android:textColor="#FF5722"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif" />
 
-    <!-- Espaço vazio para empurrar o GridLayout para o centro -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <!-- GridLayout para exibir as cartas do jogo, centralizado no meio da tela -->
+    <!-- GridLayout para as cartas -->
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
@@ -40,12 +38,9 @@
         android:rowCount="4"
         android:columnCount="4"
         android:padding="16dp"
-        android:layout_gravity="center"/>
-
-    <!-- Espaço vazio para empurrar o GridLayout para o centro -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:background="@drawable/grid_background"
+        android:layout_gravity="center"
+        android:elevation="8dp"
+        android:layout_marginBottom="16dp"/>
 
 </LinearLayout>

@@ -80,6 +80,7 @@ class BoardView(private val context: Context, private val gameManager: Game) {
             secondCard.isMatched = true
 
             // Atualizar a pontuação e notificar a Activity
+            gameManager.score += 10  // Certifique-se de que a pontuação esteja sendo incrementada
             onScoreUpdated?.invoke(gameManager.score)
             Log.d("BoardView", "Par encontrado! Pontuação: ${gameManager.score}")
 
@@ -92,9 +93,10 @@ class BoardView(private val context: Context, private val gameManager: Game) {
                 updateButtonState(firstIndex, false)
                 updateButtonState(secondIndex, false)
                 selectedCards.clear()
-            }, 1000)
+            }, 500)
         }
     }
+
 
     private fun updateButtonState(index: Int, matched: Boolean) {
         val card = gameManager.getCards()[index]

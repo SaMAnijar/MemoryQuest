@@ -3,6 +3,7 @@ package com.example.memoryquest
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class LoseActivity : AppCompatActivity() {
@@ -11,21 +12,23 @@ class LoseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lose)
 
-        val btnTryAgain = findViewById<Button>(R.id.btnTentar)
-        val btnExit = findViewById<Button>(R.id.btnSair)
+        // Recupera a pontuação passada pela MainActivity
+        val score = intent.getIntExtra("score", 0)
 
-        // Botão "Tentar novamente"
-        btnTryAgain.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()  // Fecha a tela de perdedor
+        // Exibe a pontuação no TextView
+        val tvFinalScore = findViewById<TextView>(R.id.tvFinalScore)
+        tvFinalScore.text = "Sua pontuação: $score"
+
+        // Botão para tentar novamente
+        val btnTentar = findViewById<Button>(R.id.btnTentar)
+        btnTentar.setOnClickListener {
+            finish()  // Voltar para a MainActivity
         }
 
-        // Botão "Sair" leva de volta para a tela inicial
-        btnExit.setOnClickListener {
-            val intent = Intent(this, StartActivity::class.java)
-            startActivity(intent)
-            finish()  // Fecha a tela de perdedor
+        // Botão para sair do jogo
+        val btnSair = findViewById<Button>(R.id.btnSair)
+        btnSair.setOnClickListener {
+            finishAffinity()  // Fechar o aplicativo
         }
     }
 }
