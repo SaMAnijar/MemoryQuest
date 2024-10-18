@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
 
         // Inicializando o jogo com as imagens das cartas
         val cardImages = listOf(
-            R.drawable.ic_card1, R.drawable.ic_card2
+            R.drawable.ic_card1, R.drawable.ic_card2, R.drawable.ic_card3,
+            R.drawable.ic_card4, R.drawable.ic_card5, R.drawable.ic_card6,
         )
         game = Game(cardImages)
         game.initializeGame()

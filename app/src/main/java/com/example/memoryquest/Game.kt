@@ -1,3 +1,4 @@
+import android.util.Log
 import com.example.memoryquest.Card
 
 class Game(private val cardImages: List<Int>) {
@@ -22,34 +23,27 @@ class Game(private val cardImages: List<Int>) {
         card.isFaceUp = !card.isFaceUp
     }
 
-    fun selectCard(card: Card): Boolean {
-        val selectedCards = cards.filter { it.isFaceUp && !it.isMatched }
+    fun validateCards(firstIndex: Int, secondIndex: Int): Boolean {
+        val firstCard = cards[firstIndex]
+        val secondCard = cards[secondIndex]
 
-        // Se já houver duas cartas viradas, não faça nada
-        if (selectedCards.size == 2) {
+        if (firstCard.imageResource == secondCard.imageResource) {
+            firstCard.isMatched = true
+            secondCard.isMatched = true
+
+            // Aumentar a pontuação e verificar a sequência
+            score += 10 + (5 * streak)
+            streak++
+            Log.d("Game", "Par encontrado! Pontuação: $score, Sequencia: $streak")
+            return true
+        } else {
+            streak = 0
+            Log.d("Game", "Par incorreto! Pontuação: $score")
             return false
         }
+    }
 
-        // Virar a carta
-        card.isFaceUp = true
-
-        // Verificar se formam um par
-        if (selectedCards.size == 1) {
-            val firstCard = selectedCards[0]
-            if (firstCard.imageResource == card.imageResource) {
-                // Par correto
-                firstCard.isMatched = true
-                card.isMatched = true
-
-                // Aumentar a pontuação e verificar a sequência
-                streak++
-                score += 10 + (5 * streak)  // Ganha 10 pontos + bônus de 5 pontos por sequência
-                return true
-            } else {
-                // Par incorreto, resetar a sequência
-                streak = 0
-            }
-        }
-        return false
+    fun resetStreak() {
+        streak = 0
     }
 }

@@ -64,39 +64,29 @@ class BoardView(private val context: Context, private val gameManager: Game) {
         selectedCards.add(index)
 
         if (selectedCards.size == 2) {
-            validateSelectedCards()
-        }
-    }
+            val firstIndex = selectedCards[0]
+            val secondIndex = selectedCards[1]
 
-    private fun validateSelectedCards() {
-        val firstIndex = selectedCards[0]
-        val secondIndex = selectedCards[1]
+            val isMatch = gameManager.validateCards(firstIndex, secondIndex)
 
-        val firstCard = gameManager.getCards()[firstIndex]
-        val secondCard = gameManager.getCards()[secondIndex]
+            if (isMatch) {
+                // Atualizar a pontuação e notificar a Activity
+                onScoreUpdated?.invoke(gameManager.score)
+                Log.d("BoardView", "Par encontrado! Pontuação: ${gameManager.score}")
 
-        if (firstCard.imageResource == secondCard.imageResource) {
-            firstCard.isMatched = true
-            secondCard.isMatched = true
-
-            // Atualizar a pontuação e notificar a Activity
-            gameManager.score += 10  // Certifique-se de que a pontuação esteja sendo incrementada
-            onScoreUpdated?.invoke(gameManager.score)
-            Log.d("BoardView", "Par encontrado! Pontuação: ${gameManager.score}")
-
-            selectedCards.clear()
-        } else {
-            Log.d("BoardView", "Par incorreto! Pontuação atual: ${gameManager.score}")
-            Handler(Looper.getMainLooper()).postDelayed({
-                firstCard.isFaceUp = false
-                secondCard.isFaceUp = false
-                updateButtonState(firstIndex, false)
-                updateButtonState(secondIndex, false)
                 selectedCards.clear()
-            }, 500)
+            } else {
+                gameManager.resetStreak()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    gameManager.getCards()[firstIndex].isFaceUp = false
+                    gameManager.getCards()[secondIndex].isFaceUp = false
+                    updateButtonState(firstIndex, false)
+                    updateButtonState(secondIndex, false)
+                    selectedCards.clear()
+                }, 500)
+            }
         }
     }
-
 
     private fun updateButtonState(index: Int, matched: Boolean) {
         val card = gameManager.getCards()[index]
