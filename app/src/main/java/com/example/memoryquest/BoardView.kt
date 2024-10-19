@@ -1,7 +1,6 @@
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Button
 import android.widget.GridLayout
 import com.example.memoryquest.R
@@ -72,7 +71,6 @@ class BoardView(private val context: Context, private val gameManager: Game) {
             if (isMatch) {
                 // Atualizar a pontuação e notificar a Activity
                 onScoreUpdated?.invoke(gameManager.score)
-                Log.d("BoardView", "Par encontrado! Pontuação: ${gameManager.score}")
 
                 selectedCards.clear()
             } else {

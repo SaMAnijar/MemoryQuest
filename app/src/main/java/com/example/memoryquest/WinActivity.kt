@@ -61,8 +61,8 @@ class WinActivity : AppCompatActivity() {
         setContentView(R.layout.activity_win)
 
         tvFinalScore = findViewById(R.id.tvFinalScore)
-        btnPlayAgain = findViewById(R.id.btnPlayAgain)
-        btnExit = findViewById(R.id.btnExit)
+        btnPlayAgain = findViewById(R.id.btnJogarNovamente)
+        btnExit = findViewById(R.id.btnSair)
 
         // Recebe a pontuação e o nível da MainActivity
         val score = intent.getIntExtra("score", 0)
