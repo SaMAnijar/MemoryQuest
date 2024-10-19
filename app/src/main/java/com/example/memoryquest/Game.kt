@@ -6,6 +6,7 @@ class Game(private val cardImages: List<Int>) {
     private val cards = mutableListOf<Card>()
     var score: Int = 0
     private var streak: Int = 0
+    private var matchedPairs: Int = 0  // Contador de pares encontrados
 
     fun initializeGame() {
         // Inicializar as cartas duplicadas e embaralhá-las
@@ -15,6 +16,7 @@ class Game(private val cardImages: List<Int>) {
 
         cards.clear()
         cards.addAll(cardList)
+        matchedPairs = 0  // Reiniciar os pares encontrados ao iniciar o jogo
     }
 
     fun getCards(): List<Card> = cards
@@ -34,6 +36,7 @@ class Game(private val cardImages: List<Int>) {
             // Aumentar a pontuação e verificar a sequência
             score += 10 + (5 * streak)
             streak++
+            onPairMatched()  // Chamar o método ao encontrar um par
             Log.d("Game", "Par encontrado! Pontuação: $score, Sequencia: $streak")
             return true
         } else {
@@ -45,5 +48,16 @@ class Game(private val cardImages: List<Int>) {
 
     fun resetStreak() {
         streak = 0
+    }
+
+    // Método que será chamado sempre que um par for encontrado
+    fun onPairMatched() {
+        matchedPairs++  // Incrementar o contador de pares encontrados
+    }
+
+    // Verifica se todos os pares foram encontrados
+    fun isComplete(): Boolean {
+        // Se o número de pares encontrados for igual ao número de pares de cartas
+        return matchedPairs == cardImages.size
     }
 }

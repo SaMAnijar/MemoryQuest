@@ -1,87 +1,3 @@
-/*package com.example.memoryquest
-
-import BoardView
-import Game
-import android.content.Intent
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.widget.GridLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var gridLayout: GridLayout
-    private lateinit var tvScore: TextView
-    private lateinit var tvTimer: TextView
-
-    private lateinit var game: Game
-    private lateinit var boardView: BoardView
-    private lateinit var countDownTimer: CountDownTimer
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        gridLayout = findViewById(R.id.gridLayout)
-        tvScore = findViewById(R.id.tvScore)
-        tvTimer = findViewById(R.id.tvTimer)
-
-        // Inicializando o jogo com as imagens das cartas
-        val cardImages = listOf(
-            R.drawable.ic_card1, R.drawable.ic_card2, R.drawable.ic_card3,
-            R.drawable.ic_card4, R.drawable.ic_card5, R.drawable.ic_card6,
-        )
-        game = Game(cardImages)
-        game.initializeGame()
-
-        // Inicializando o BoardView para desenhar as cartas
-        boardView = BoardView(this, game)
-        boardView.createBoardView(gridLayout)
-
-        // Atualiza a pontuação inicial no layout
-        tvScore.text = "Pontuação: ${game.score}"
-
-        // Define o callback para atualizar a pontuação quando um par é acertado
-        boardView.onScoreUpdated = { newScore ->
-            tvScore.text = "Pontuação: $newScore"
-        }
-
-        // Inicia o timer
-        startTimer()
-    }
-
-    private fun updateScore(score: Int) {
-        tvScore.text = "Pontuação: $score"
-    }
-
-    private fun startTimer() {
-        countDownTimer = object : CountDownTimer(60000, 1000) {  // 60 segundos, intervalo de 1 segundo
-            override fun onTick(millisUntilFinished: Long) {
-                tvTimer.text = "Tempo: ${millisUntilFinished / 1000}"
-            }
-
-            override fun onFinish() {
-                showLoseScreen()  // Exibe a tela de perder quando o tempo acabar
-            }
-        }
-        countDownTimer.start()
-    }
-
-    private fun showLoseScreen() {
-        val intent = Intent(this, LoseActivity::class.java)
-        intent.putExtra("score", game.score)  // Passa a pontuação para a LoseActivity
-        startActivity(intent)
-        finish()  // Fecha a MainActivity
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        countDownTimer.cancel()  // Cancela o timer ao destruir a atividade
-    }
-}*/
-
-
 package com.example.memoryquest
 
 import BoardView
@@ -101,13 +17,18 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var game: Game
     private lateinit var boardView: BoardView
-    private lateinit var countDownTimer: CountDownTimer
+    private var countDownTimer: CountDownTimer? = null  // Certifique-se de que seja nullável
 
     private var level = 1  // Controla o nível do jogo
+    private var currentScore = 0  // Variável para armazenar a pontuação acumulada
+    private val maxLevel = 6  // Definimos o nível 6 como o último nível
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Recebe o nível do intent (caso tenha vindo de outra atividade)
+        level = intent.getIntExtra("level", 1)
 
         gridLayout = findViewById(R.id.gridLayout)
         tvScore = findViewById(R.id.tvScore)
@@ -118,12 +39,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startNewGame(level: Int) {
+        // Parar o timer anterior, caso exista
+        countDownTimer?.cancel()
+
         // Definir as imagens do jogo com base no nível atual
         val cardImages = getCardImagesForLevel(level)
 
         // Inicializa o jogo com o número adequado de imagens
         game = Game(cardImages)
         game.initializeGame()
+
+        // Atualiza a pontuação acumulada no jogo (mantém a pontuação entre os níveis)
+        game.score = currentScore
 
         // Inicializa o BoardView para desenhar as cartas
         boardView = BoardView(this, game)
@@ -134,10 +61,12 @@ class MainActivity : AppCompatActivity() {
 
         // Define o callback para atualizar a pontuação quando um par é acertado
         boardView.onScoreUpdated = { newScore ->
-            tvScore.text = "Pontuação: $newScore"
+            currentScore = newScore  // Atualiza a pontuação acumulada
+            tvScore.text = "Pontuação: $currentScore"
+            checkGameCompletion()  // Verifica se o jogo foi concluído
         }
 
-        // Inicia o timer
+        // Inicia o timer para o novo nível
         startTimer()
     }
 
@@ -166,28 +95,45 @@ class MainActivity : AppCompatActivity() {
                 showLoseScreen()  // Exibe a tela de perder quando o tempo acabar
             }
         }
-        countDownTimer.start()
+        countDownTimer?.start()  // Inicia o timer
     }
 
-    private fun showWinScreen() {
-        // Aumenta o nível e reinicia o jogo
-        level++
+    private fun checkGameCompletion() {
+        // Verifica se o jogo está completo (todos os pares encontrados)
+        if (game.isComplete()) {
+            if (level == maxLevel) {
+                // Se estiver no último nível, exibe a tela de vitória
+                showVictoryScreen()
+            } else {
+                level++  // Aumenta o nível
+
+                // Reinicia o jogo para o próximo nível e mantém a pontuação
+                startNewGame(level)
+            }
+        }
+    }
+
+    private fun showVictoryScreen() {
         val intent = Intent(this, WinActivity::class.java)
-        intent.putExtra("score", game.score)
-        intent.putExtra("level", level)  // Passa o nível atualizado para a WinActivity
+        intent.putExtra("score", game.score)  // Envia a pontuação para a tela de vitória
         startActivity(intent)
         finish()  // Fecha a MainActivity
     }
 
     private fun showLoseScreen() {
         val intent = Intent(this, LoseActivity::class.java)
-        intent.putExtra("score", game.score)
+        intent.putExtra("score", game.score)  // Envia a pontuação para a tela de perder
         startActivity(intent)
+
+        // Resetar a pontuação ao perder
+        currentScore = 0
+
         finish()  // Fecha a MainActivity
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        countDownTimer.cancel()  // Cancela o timer ao destruir a atividade
+        countDownTimer?.cancel()  // Cancela o timer ao destruir a atividade
     }
 }
+

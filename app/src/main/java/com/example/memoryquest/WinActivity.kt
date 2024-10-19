@@ -60,6 +60,7 @@ class WinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_win)
 
+        // Inicializa as views do layout
         tvFinalScore = findViewById(R.id.tvFinalScore)
         btnPlayAgain = findViewById(R.id.btnJogarNovamente)
         btnExit = findViewById(R.id.btnSair)
@@ -68,21 +69,20 @@ class WinActivity : AppCompatActivity() {
         val score = intent.getIntExtra("score", 0)
         level = intent.getIntExtra("level", 1)
 
+        // Exibe a pontuação final
         tvFinalScore.text = "Parabéns! Sua pontuação: $score"
 
-        // Jogar novamente com o próximo nível
+        // Configura o botão "Jogar Novamente"
         btnPlayAgain.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("level", level)  // Passa o nível para a MainActivity
+            intent.putExtra("level", level)  // Passa o nível atualizado para a MainActivity
             startActivity(intent)
-            finish()
+            finish()  // Fecha a WinActivity
         }
 
-        // Sair do jogo
+        // Configura o botão "Sair"
         btnExit.setOnClickListener {
-            finishAffinity()  // Fecha todas as atividades
+            finishAffinity()  // Fecha todas as atividades e encerra o aplicativo
         }
     }
 }
-
-
