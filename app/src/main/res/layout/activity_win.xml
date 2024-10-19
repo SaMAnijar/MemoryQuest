@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@android:color/white"
+    android:padding="24dp">
+
+    <!-- Texto de Vitória -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Você venceu!"
+        android:textSize="28sp"
+        android:textColor="#4CAF50"
+        android:layout_marginBottom="24dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"/>
+
+    <!-- Texto para exibir a pontuação final -->
+    <TextView
+        android:id="@+id/tvFinalScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sua pontuação: 0"
+        android:textSize="24sp"
+        android:textColor="#000000"
+        android:layout_marginBottom="24dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"/>
+
+    <!-- Botão para jogar novamente -->
+    <Button
+        android:id="@+id/btnJogarNovamente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jogar Novamente"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#4CAF50"
+        android:elevation="4dp"
+        android:padding="12dp"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_button"/>
+
+    <!-- Botão de Sair -->
+    <Button
+        android:id="@+id/btnSair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sair"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#F44336"
+        android:elevation="4dp"
+        android:padding="12dp"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/rounded_button"/>
+
+</LinearLayout>
